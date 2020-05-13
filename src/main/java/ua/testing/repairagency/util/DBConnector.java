@@ -3,10 +3,10 @@ package ua.testing.repairagency.util;
 import java.sql.Connection;
 import java.sql.DriverManager;
 
-public class DBConnection {
-    public static Connection createConnection(){
+public class DBConnector {
+    public static Connection getConnection(){
         Connection con = null;
-        String url = "jdbc:mysql://localhost:3306/test_repair?serverTimezone=UTC";
+        String url = "jdbc:mysql://localhost:3306/repairservice?serverTimezone=UTC";
         String username= "root";
         String password= "tabaroque_51";
 

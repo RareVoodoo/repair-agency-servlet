@@ -1,8 +1,10 @@
 package ua.testing.repairagency.servlet;
 
-import ua.testing.repairagency.dto.UserDTO;
-import ua.testing.repairagency.service.LoginService;
+import ua.testing.repairagency.dto.UserDto;
+import ua.testing.repairagency.exception.PersistException;
 import ua.testing.repairagency.service.RegisterService;
+import ua.testing.repairagency.service.RepairRequestService;
+import ua.testing.repairagency.util.PasswordEncryptor;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -11,21 +13,31 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class RegisterServlet extends HttpServlet {
+    private PasswordEncryptor passwordEncryptor = PasswordEncryptor.getInstance();
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         String userName = request.getParameter("username");
         String password = request.getParameter("password");
-        String email = request.getParameter("email");
+        String email = request.getParameter("fullName");
 
-        UserDTO userDTO = new UserDTO();
+
+
+
+        UserDto userDTO = new UserDto();
         RegisterService registerService = new RegisterService();
 
-        userDTO.setUsername(userName);
-        userDTO.setPassword(password);
-        userDTO.setEmail(email);
 
-        registerService.createNewUser(userDTO);
+        userDTO.setUsername(userName);
+        userDTO.setPassword(passwordEncryptor.encrypt(password));
+        userDTO.setEn_name(email);
+
+        try {
+            registerService.createNewUser(userDTO);
+        } catch (PersistException e) {
+            e.printStackTrace();
+        }
+
 
     }
 

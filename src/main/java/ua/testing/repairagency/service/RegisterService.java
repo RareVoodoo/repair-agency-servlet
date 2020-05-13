@@ -2,35 +2,30 @@ package ua.testing.repairagency.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ua.testing.repairagency.dto.UserDTO;
-import ua.testing.repairagency.util.DBConnection;
-
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import ua.testing.repairagency.dao.UserDao;
+import ua.testing.repairagency.dto.UserDto;
+import ua.testing.repairagency.exception.PersistException;
+import ua.testing.repairagency.model.User;
+import ua.testing.repairagency.util.DBConnector;
 
 
 public class RegisterService {
-    public void createNewUser(UserDTO userDTO){
+    public void createNewUser(UserDto userDTO) throws PersistException {
         final Logger logger = LoggerFactory.getLogger(RegisterService.class);
-        Connection con = DBConnection.createConnection();
+
+        UserDao userDao = new UserDao(DBConnector.getConnection());
+
         try {
-            PreparedStatement ps = con.prepareStatement("insert into `user` (username, password,email,role)" +
-                    " values (?,?,?,?)");
+        userDao.create(new User.Builder()
+                .en_name(userDTO.getEn_name())
+                .username(userDTO.getUsername())
+                .password(userDTO.getPassword())
+                .enabled(true)
+                .idAuthority(1)
+                .build());
 
-            ps.setString(1, userDTO.getUsername());
-            ps.setString(2, userDTO.getPassword());
-            ps.setString(3, userDTO.getEmail());
-            ps.setString(4, "User");
-            int i = ps.executeUpdate();
-
-            if(i>0){
-                logger.info("User created successfully");
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
+        }catch (Exception e){
+            throw new PersistException(e);
         }
     }
-
 }

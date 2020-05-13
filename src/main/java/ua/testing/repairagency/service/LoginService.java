@@ -1,58 +1,44 @@
 package ua.testing.repairagency.service;
 
-import ua.testing.repairagency.dto.UserDTO;
-import ua.testing.repairagency.util.DBConnection;
+import ua.testing.repairagency.dao.UserDao;
+import ua.testing.repairagency.dto.UserDto;
+import ua.testing.repairagency.exception.PersistException;
+import ua.testing.repairagency.model.User;
+import ua.testing.repairagency.util.DBConnector;
+import ua.testing.repairagency.util.PasswordEncryptor;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.util.List;
 
-    public class LoginService {
+public class LoginService {
+    private PasswordEncryptor passwordEncryptor = PasswordEncryptor.getInstance();
 
-        public String authenticateUser(UserDTO userDTO)
-        {
-            String userName = userDTO.getUsername();
-            System.out.println(userName);
-            String password = userDTO.getPassword();
-            System.out.println(password);
+    public String authenticateUser(UserDto userDTO) {
+        String userName = userDTO.getUsername();
+        String password = userDTO.getPassword();
 
-            Connection con = null;
-            Statement statement = null;
-            ResultSet resultSet = null;
+        try {
 
-            String userNameDB = "";
-            String passwordDB = "";
-            String roleDB = "";
-
-            try
-            {
-                con = DBConnection.createConnection();
-                statement = con.createStatement();
-                resultSet = statement.executeQuery("select username,password,role from `user`");
+            UserDao userDao = new UserDao(DBConnector.getConnection());
+            List<User> userList = userDao.getAll();
 
 
-                while(resultSet.next())
-                {
-                    userNameDB = resultSet.getString("username");
-                    System.out.println("userNameDB= " + userNameDB);
-                    passwordDB = resultSet.getString("password");
-                    System.out.println("password DB= " + passwordDB);
-                    roleDB = resultSet.getString("role");
-                    System.out.println("roleDB= " + roleDB);
+            for (User user : userList) {
+                String userNameDB = user.getUsername();
+                String passwordDB = user.getPassword();
+                int roleID = user.getIdAuthority();
 
-                    if(userName.equals(userNameDB) && password.equals(passwordDB) && roleDB.equals("Admin"))
-                        return "Admin_Role";
-                    else if(userName.equals(userNameDB) && password.equals(passwordDB) && roleDB.equals("Editor"))
-                        return "Editor_Role";
-                    else if(userName.equals(userNameDB) && password.equals(passwordDB) && roleDB.equals("User"))
-                        return "User_Role";
-                }
+
+                if (userName.equals(userNameDB) && password.equals(passwordEncryptor.decrypt(passwordDB)) && roleID == 3)
+                    return "Admin_Role";
+                else if (userName.equals(userNameDB) && password.equals(passwordEncryptor.decrypt(passwordDB)) && roleID == 2)
+                    return "Master_Role";
+                else if (userName.equals(userNameDB) && password.equals(passwordEncryptor.decrypt(passwordDB)) && roleID == 1)
+                    return "User_Role";
             }
-            catch(SQLException e)
-            {
-                e.printStackTrace();
-            }
-            return "Invalid user credentials";
+        } catch (PersistException e) {
+            e.printStackTrace();
         }
+
+        return "Invalid user credentials";
     }
+}

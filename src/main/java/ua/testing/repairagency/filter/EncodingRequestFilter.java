@@ -1,6 +1,7 @@
 package ua.testing.repairagency.filter;
 
 import javax.servlet.*;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Properties;
@@ -11,6 +12,7 @@ public class EncodingRequestFilter implements Filter {
     }
 
     public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws ServletException, IOException {
+
 
         resp.setContentType("text/html;");
         req.setCharacterEncoding("UTF-8");
