@@ -1,5 +1,6 @@
 package ua.testing.repairagency.servlet;
 
+import ua.testing.repairagency.dao.CommentDao;
 import ua.testing.repairagency.dao.RepairRequestDao;
 import ua.testing.repairagency.exception.PersistException;
 import ua.testing.repairagency.service.RepairRequestService;
@@ -24,12 +25,13 @@ public class UserServlet extends HttpServlet {
         HttpSession session = request.getSession();
         RepairRequestService repairRequestService = new RepairRequestService();
         RepairRequestDao requestDao = new RepairRequestDao(DBConnector.getConnection());
+        CommentDao commentDao = new CommentDao(DBConnector.getConnection());
 
 
         if(session.getAttribute("role").equals("User")){
             try {
-                request.setAttribute("request", requestDao.getAll());
-//                request.setAttribute("request", repairRequestService.releaseRepairRequestDatasetMap());
+                request.setAttribute("request", requestDao.getAllById());
+                request.setAttribute("comment", commentDao.getAllById());
             } catch (PersistException e) {
                 e.printStackTrace();
             }

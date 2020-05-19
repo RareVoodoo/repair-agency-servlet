@@ -35,13 +35,17 @@ public class RepairRequestDao extends AbstractDao<RepairRequest, Long> {
 
     @Override
     public String getUpdateQuery() {
-        return " update repair_request set description = ?, accepted =?,\n" +
-                " performed = ?,\n" +
-                " cancellation_reason = ?,\n" +
-                " uah_price = ?,\n" +
-                " usd_price = ?,\n" +
-                " user_iduser = ?" +
-                "where idrepair_request = ?";
+        return " update repair_request set \n" +
+                "description = ?,\n" +
+                "accepted =?,\n" +
+                "performed = ?,\n" +
+                "cancellation_reason = ?,\n" +
+                "uah_price = ?,\n" +
+                "usd_price = ?,\n" +
+                "user_iduser = ?,\n" +
+                "address = ?,\n" +
+                "user_phone_number = ? \n" +
+                "where idrepair_request = ?;";
     }
 
 
@@ -87,6 +91,9 @@ public class RepairRequestDao extends AbstractDao<RepairRequest, Long> {
                 repairRequest.setCancellationReason(resultSet.getString("cancellation_reason"));
                 repairRequest.setUahPrice(resultSet.getLong("uah_price"));
                 repairRequest.setUsdPrice(resultSet.getLong("usd_price"));
+                repairRequest.setAddress(resultSet.getString("address"));
+                repairRequest.setUserPhoneNumber(resultSet.getString("user_phone_number"));
+                repairRequest.setUserId(resultSet.getLong("user_iduser"));
                 result.add(repairRequest);
             }
         } catch (Exception e) {
@@ -101,10 +108,13 @@ public class RepairRequestDao extends AbstractDao<RepairRequest, Long> {
             statement.setString(1, object.getDescription());
             statement.setBoolean(2, object.isAccepted());
             statement.setBoolean(3, object.isPerformed());
-            statement.setLong(4, object.getUahPrice());
-            statement.setLong(5, object.getUsdPrice());
-            statement.setLong(6, object.getUserId());
-            statement.setLong(7, object.getId());
+            statement.setString(4,object.getCancellationReason());
+            statement.setLong(5, object.getUahPrice());
+            statement.setLong(6, object.getUsdPrice());
+            statement.setLong(7, object.getUserId());
+            statement.setString(8, object.getAddress());
+            statement.setString(9, object.getUserPhoneNumber());
+            statement.setLong(10, object.getId());
         } catch (Exception e) {
             throw new PersistException(e);
         }

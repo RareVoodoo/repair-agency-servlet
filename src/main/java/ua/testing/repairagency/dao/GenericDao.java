@@ -7,9 +7,9 @@ import java.util.Optional;
 
 public interface GenericDao<T> {
 
-    Optional<T> get(long id) throws PersistException;
+    Optional<T> getById(long id) throws PersistException;
 
-    List<T> getAll() throws PersistException;
+    List<T> getAllById() throws PersistException;
 
     void create(T object) throws PersistException;
 

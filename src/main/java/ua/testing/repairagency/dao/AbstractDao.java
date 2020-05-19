@@ -26,7 +26,7 @@ public abstract class AbstractDao<T extends  Identified<PK>, PK extends Long> im
     protected abstract void prepareStatementForUpdate(PreparedStatement statement, T object) throws PersistException;
 
     @Override
-    public Optional<T> get(long id) throws PersistException {
+    public Optional<T> getById(long id) throws PersistException {
         List<T> list;
         String sqlQuery = getSelectQuery();
         try(PreparedStatement statement = connection.prepareStatement(sqlQuery)) {
@@ -50,7 +50,7 @@ public abstract class AbstractDao<T extends  Identified<PK>, PK extends Long> im
     }
 
     @Override
-    public List<T> getAll() throws PersistException {
+    public List<T> getAllById() throws PersistException {
         List<T> list;
         String sqlQuery = getAllSelectQuery();
 

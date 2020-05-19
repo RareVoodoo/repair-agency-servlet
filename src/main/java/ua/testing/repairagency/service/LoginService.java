@@ -19,7 +19,7 @@ public class LoginService {
         try {
 
             UserDao userDao = new UserDao(DBConnector.getConnection());
-            List<User> userList = userDao.getAll();
+            List<User> userList = userDao.getAllById();
 
 
             for (User user : userList) {

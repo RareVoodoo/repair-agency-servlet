@@ -23,13 +23,11 @@ public class DeleteServlet extends HttpServlet {
         Long requestId = Long.parseLong(request.getParameter("id"));
 
         try {
-            Optional<RepairRequest> repairRequest = repairDao.get(requestId);
+            Optional<RepairRequest> repairRequest = repairDao.getById(requestId);
             repairDao.delete(repairRequest.get());
         } catch (PersistException e) {
             e.printStackTrace();
         }
-
-        response.sendRedirect("/user");
-
+        response.sendRedirect("/admin");
     }
 }

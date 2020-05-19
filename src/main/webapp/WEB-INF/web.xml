@@ -111,10 +111,38 @@
     </servlet>
 
 
-
-    <servlet-mapping>
+  <servlet-mapping>
     <servlet-name>UserRequestServlet</servlet-name>
     <url-pattern>/user/newRequest</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>CancelRequestServlet</servlet-name>
+    <servlet-class>ua.testing.repairagency.servlet.CancelRequestServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>CancelRequestServlet</servlet-name>
+    <url-pattern>/admin/cancelRequest</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>AcceptRequestServlet</servlet-name>
+    <servlet-class>ua.testing.repairagency.servlet.AcceptRequestServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>AddCommentServlet</servlet-name>
+    <servlet-class>ua.testing.repairagency.servlet.AddCommentServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>AddCommentServlet</servlet-name>
+    <url-pattern>/user/addComment</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>AcceptRequestServlet</servlet-name>
+    <url-pattern>/admin/acceptRequest</url-pattern>
   </servlet-mapping>
 
   <filter>

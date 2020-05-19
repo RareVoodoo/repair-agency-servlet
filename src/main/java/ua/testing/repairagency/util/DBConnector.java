@@ -1,14 +1,18 @@
 package ua.testing.repairagency.util;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.util.Properties;
 
 public class DBConnector {
     public static Connection getConnection(){
         Connection con = null;
-        String url = "jdbc:mysql://localhost:3306/repairservice?serverTimezone=UTC";
-        String username= "root";
-        String password= "tabaroque_51";
+
+        String url = getDbPropertyValue("db.connection.url");
+        String username= getDbPropertyValue("db.username");
+        String password = getDbPropertyValue("db.password");
 
         try
         {
@@ -29,6 +33,23 @@ public class DBConnector {
         }
 
         return con;
+    }
+
+    private static String getDbPropertyValue(String propertyKey){
+        String propertyValue = "";
+        try(InputStream input = DBConnector.class.getClassLoader().getResourceAsStream("db.properties")){
+
+            Properties prop = new Properties();
+            if (input == null) {
+                System.out.println("Sorry, unable to find config.properties");
+            }
+            prop.load(input);
+            propertyValue = prop.getProperty(propertyKey);
+
+        }catch (IOException e) {
+            e.printStackTrace();
+        }
+        return propertyValue;
     }
 }
 
