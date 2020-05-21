@@ -61,16 +61,23 @@
 
 <main role="main" class="container">
     <div class="starter-template">
+        <div>
+        <a id="newRequest" class="btn btn-success btn-lg text-white" data-toggle="modal"
+        data-target="#newRequestModal">
+        <fmt:message key="page.new.request"/>
+        </a>
+
+        </div>
+
+        <h2><fmt:message key="page.user.my.executed.requests"/></h2>
         <div class="table-responsive">
             <table class="table">
                 <thead class=" text-primary">
                 <th scope="col">Id</th>
-                <th scope="col">Description</th>
-                <th scope="col">RepairPrice</th>
-                <th scope="col">Cancellation Reason</th>
-                <th scope="col">Accept</th>
-                <th scope="col">Cancel</th>
-                <th scope="col">Delete</th>
+                <th scope="col"><fmt:message key="label.user.description"/></th>
+                <th scope="col"><fmt:message key="label.user.repair.price"/></th>
+                <th scope="col"><fmt:message key="label.user.comment"/></th>
+                <th scope="col"><fmt:message key="label.user.add.comment"/></th>
                 </thead>
                 <tbody>
                 <c:forEach items="${request}" var="req" varStatus="idx">
@@ -82,9 +89,9 @@
                         <td><a id="addComment" class="btn btn-success btn-sm text-white" data-toggle="modal"
                                data-id="${req.id}"
                                data-target="#addCommentModal">
+                            <fmt:message key="label.user.add.comment"/>
                         </a>
                         </td>
-
                     </tr>
                 </c:forEach>
                 </tbody>
@@ -101,7 +108,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalScrollableTitle"><fmt:message
-                        key="label.user.repair.price"/></h5>
+                        key="label.user.comment"/></h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -113,6 +120,54 @@
                            placeholder="<fmt:message
                         key="label.user.comment"/>" required
                            autofocus>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal"><fmt:message
+                            key="label.button.cancel"/></button>
+                    <button type="submit" class="btn btn-primary"><fmt:message key="label.button.accept"/></button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="newRequestModal" tabindex="-1" role="dialog"
+     aria-labelledby="exampleModalScrollableTitle2" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalScrollableTitle2"><fmt:message
+                        key="label.user.comment"/></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="/user/newRequest" method="post">
+                <div class="modal-body">
+                    <p>
+                    <input type="text" name="description" class="form-control"
+                           placeholder="<fmt:message
+                        key="label.user.description"/>" required
+                           autofocus>
+                    </p>
+
+                    <p>
+                    <input type="text" name="address" class="form-control"
+                           placeholder="<fmt:message
+                        key="page.user.address"/>" required
+                           autofocus>
+                    </p>
+
+                    <p>
+                    <input type="text" name="phoneNumber" class="form-control"
+                           placeholder="<fmt:message
+                        key="page.user.phone.number"/>" required
+                           autofocus>
+
+                    </p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal"><fmt:message
@@ -146,16 +201,6 @@
         crossorigin="anonymous"></script>
 
 
-<form action="/user/newRequest" method="post">
-
-    Address:<input type="text" name="address"/><br/><br/>
-    phone number:<input type="password" name="phoneNumber"/><br/><br/>
-    Description:<input type="text" name="description"/><br/><br/>
-
-    <br/><br/>
-    <input type="submit" value="submit"/>
-
-</form>
 
 </body>
 </html>

@@ -4,6 +4,7 @@ import ua.testing.repairagency.exception.PersistException;
 import ua.testing.repairagency.model.RepairRequest;
 import ua.testing.repairagency.model.User;
 
+import javax.management.Query;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -11,9 +12,11 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class RepairRequestDao extends AbstractDao<RepairRequest, Long> {
+    private Connection connection;
 
     public RepairRequestDao(Connection connection) {
         super(connection);
+        this.connection = connection;
     }
 
     private class PersistRepairRequest extends RepairRequest {
@@ -24,7 +27,15 @@ public class RepairRequestDao extends AbstractDao<RepairRequest, Long> {
 
     @Override
     public String getAllSelectQuery() {
-        return "select * from repair_request";
+        return "select * from repair_request;";
+    }
+
+    public String getAllByUsernameQuery() {
+        return "select repair_request.* from repair_request \n" +
+                "inner join user\n" +
+                "on iduser = user_iduser\n" +
+                "where username = ?\n" +
+                "and accepted & performed\n";
     }
 
     @Override
@@ -108,7 +119,7 @@ public class RepairRequestDao extends AbstractDao<RepairRequest, Long> {
             statement.setString(1, object.getDescription());
             statement.setBoolean(2, object.isAccepted());
             statement.setBoolean(3, object.isPerformed());
-            statement.setString(4,object.getCancellationReason());
+            statement.setString(4, object.getCancellationReason());
             statement.setLong(5, object.getUahPrice());
             statement.setLong(6, object.getUsdPrice());
             statement.setLong(7, object.getUserId());
@@ -118,5 +129,18 @@ public class RepairRequestDao extends AbstractDao<RepairRequest, Long> {
         } catch (Exception e) {
             throw new PersistException(e);
         }
+    }
+
+    public List<RepairRequest> getAllByUserId(String username) throws PersistException {
+        List<RepairRequest> list;
+
+        try (PreparedStatement statement = connection.prepareStatement(getAllByUsernameQuery())) {
+            statement.setString(1, username);
+            ResultSet resultSet = statement.executeQuery();
+            list = parseResultSet(resultSet);
+        } catch (Exception e) {
+            throw new PersistException();
+        }
+        return list;
     }
 }

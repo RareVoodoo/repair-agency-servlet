@@ -41,26 +41,4 @@ public class RepairRequestService {
             throw new PersistException(e);
         }
     }
-
-    public HashMap<String, Object> releaseRepairRequestDatasetMap() throws PersistException {
-        HashMap<String, Object> map = new HashMap<>();
-        try (PreparedStatement statement = connection.prepareStatement(repairDao.getAllSelectQuery())) {
-
-            ResultSet resultSet = statement.executeQuery();
-            List<RepairRequest> repairRequests = repairDao.parseResultSet(resultSet);
-
-            for (RepairRequest request : repairRequests){
-                map.put("id",request.getId());
-                map.put("description", request.getDescription());
-                map.put("accepted",request.isAccepted());
-                map.put("performed", request.isPerformed());
-                map.put("cancellationReason", request.getCancellationReason());
-                map.put("uahPrice", request.getUahPrice());
-                map.put("usdPrice", request.getUsdPrice());
-            }
-        }catch (Exception e){
-            throw new PersistException(e);
-        }
-        return map;
-    }
 }

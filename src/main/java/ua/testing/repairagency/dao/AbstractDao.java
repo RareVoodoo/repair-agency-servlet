@@ -45,7 +45,6 @@ public abstract class AbstractDao<T extends  Identified<PK>, PK extends Long> im
             throw new PersistException("Received more than one record");
 
         }
-
         return Optional.ofNullable(list.iterator().next());
     }
 

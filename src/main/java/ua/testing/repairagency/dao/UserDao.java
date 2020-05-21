@@ -60,10 +60,12 @@ public class UserDao extends AbstractDao<User, Long>{
                 "values(?,?,?,?,?,?);";
     }
 
-    public String getUserIdByUsernameQuery(){
+
+    public String getIdByUsernameQuery(){
         return " select iduser from user\n" +
                 " where username = ?;";
     }
+
 
     @Override
     public void prepareStatementForInsert(PreparedStatement statement, User object) throws PersistException {
@@ -117,7 +119,7 @@ public class UserDao extends AbstractDao<User, Long>{
 
     public Long getUserIdByUsername(String username) throws PersistException {
         long userId =0;
-        try (PreparedStatement statement = connection.prepareStatement(getUserIdByUsernameQuery())) {
+        try (PreparedStatement statement = connection.prepareStatement(getIdByUsernameQuery())) {
             statement.setString(1,username);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()){
@@ -129,4 +131,5 @@ public class UserDao extends AbstractDao<User, Long>{
         }
         return userId;
     }
+
 }

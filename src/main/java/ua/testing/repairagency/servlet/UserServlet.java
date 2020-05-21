@@ -30,7 +30,8 @@ public class UserServlet extends HttpServlet {
 
         if(session.getAttribute("role").equals("User")){
             try {
-                request.setAttribute("request", requestDao.getAllById());
+                String username = (String) session.getAttribute("currentUsername");
+                request.setAttribute("request", requestDao.getAllByUserId(username));
                 request.setAttribute("comment", commentDao.getAllById());
             } catch (PersistException e) {
                 e.printStackTrace();

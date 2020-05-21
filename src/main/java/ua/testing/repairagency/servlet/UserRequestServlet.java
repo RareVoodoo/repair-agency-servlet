@@ -13,7 +13,6 @@ import java.io.IOException;
 
 public class UserRequestServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
         RepairRequestDto repairRequestDto = new RepairRequestDto();
         HttpSession session = request.getSession();
         RepairRequestService requestService = new RepairRequestService();
@@ -29,12 +28,13 @@ public class UserRequestServlet extends HttpServlet {
         repairRequestDto.setUsername((String) session.getAttribute("currentUsername"));
 
 
-        try{
+        try {
             requestService.createNewRepairRequest(repairRequestDto);
-        }catch (PersistException e){
+        } catch (PersistException e) {
             e.printStackTrace();
         }
 
+        response.sendRedirect("/user");
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

@@ -1,10 +1,7 @@
 package ua.testing.repairagency.filter;
 
 import javax.servlet.*;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.Properties;
 
 public class EncodingRequestFilter implements Filter {
     private String encoding;
