@@ -1,0 +1,14 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="repair-agency-servlets:war">
+    <output-path>$PROJECT_DIR$/target</output-path>
+    <properties id="maven-jee-properties">
+      <options>
+        <module>repair-agency-servlets</module>
+        <packaging>war</packaging>
+      </options>
+    </properties>
+    <root id="archive" name="repair-agency-servlets.war">
+      <element id="artifact" artifact-name="repair-agency-servlets:war exploded" />
+    </root>
+  </artifact>
+</component>

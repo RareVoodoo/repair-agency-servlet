@@ -1,55 +1,55 @@
 package ua.testing.repairagency.util;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.sql.DataSource;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
-import java.sql.DriverManager;
-import java.util.Properties;
+import java.sql.SQLException;
 
-public class DBConnector {
-    public static Connection getConnection(){
+public class DbConnector {
+    final static Logger logger = LogManager.getLogger();
+    private volatile static DbConnector instance;
+
+    private DbConnector(){
+    }
+
+
+    public static DbConnector getInstance(){
+        if(instance == null){
+            synchronized (DbConnector.class){
+                if(instance == null){
+                    instance = new DbConnector();
+                }
+            }
+        }
+        return instance;
+    }
+
+
+    public  Connection getConnection(){
+        Context ctx;
         Connection con = null;
 
-        String url = getDbPropertyValue("db.connection.url");
-        String username= getDbPropertyValue("db.username");
-        String password = getDbPropertyValue("db.password");
-
-        try
-        {
-            try
-            {
-                Class.forName("com.mysql.cj.jdbc.Driver");
-            }
-            catch (ClassNotFoundException e)
-            {
-                e.printStackTrace();
-            }
-            con = DriverManager.getConnection(url, username, password);
-            System.out.println("Post establishing a DB connection - "+con);
-        }
-        catch (Exception e)
-        {
+        try{
+            ctx = new InitialContext();
+            DataSource dataSource = (DataSource) ctx.lookup("java:comp/env/jdbc/mysqlPool");
+            con = dataSource.getConnection();
+        } catch (SQLException e) {
+            logger.error("SQL exception");
             e.printStackTrace();
-        }
+        } catch (NamingException e) {
+            logger.error("Context exception");
+            e.printStackTrace();
 
+        }
         return con;
     }
 
-    private static String getDbPropertyValue(String propertyKey){
-        String propertyValue = "";
-        try(InputStream input = DBConnector.class.getClassLoader().getResourceAsStream("db.properties")){
-
-            Properties prop = new Properties();
-            if (input == null) {
-                System.out.println("Sorry, unable to find config.properties");
-            }
-            prop.load(input);
-            propertyValue = prop.getProperty(propertyKey);
-
-        }catch (IOException e) {
-            e.printStackTrace();
-        }
-        return propertyValue;
-    }
 }
 

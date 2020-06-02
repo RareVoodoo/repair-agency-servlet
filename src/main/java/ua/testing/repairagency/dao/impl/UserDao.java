@@ -1,5 +1,6 @@
-package ua.testing.repairagency.dao;
+package ua.testing.repairagency.dao.impl;
 
+import ua.testing.repairagency.dao.AbstractDao;
 import ua.testing.repairagency.exception.PersistException;
 import ua.testing.repairagency.model.User;
 
@@ -8,8 +9,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
-public class UserDao extends AbstractDao<User, Long>{
+public class UserDao extends AbstractDao<User, Long> {
 
     private Connection  connection ;
     public UserDao(Connection connection) {
@@ -64,6 +66,13 @@ public class UserDao extends AbstractDao<User, Long>{
     public String getIdByUsernameQuery(){
         return " select iduser from user\n" +
                 " where username = ?;";
+    }
+
+    public String getUserByUsername(){
+        return "select * from user " +
+                "left join authority " +
+                "on id_authority = idauthority " +
+                "where username = ?;";
     }
 
 
@@ -130,6 +139,20 @@ public class UserDao extends AbstractDao<User, Long>{
             throw new PersistException(e);
         }
         return userId;
+    }
+
+    public Optional<User> getUserByUsername(String username) throws PersistException {
+        List<User> list;
+        try(PreparedStatement statement = connection.prepareStatement(getUserByUsername())){
+            statement.setString(1,username);
+            ResultSet rs = statement.executeQuery();
+            list = parseResultSet(rs);
+
+        }catch (Exception e){
+            throw  new PersistException(e);
+        }
+
+        return Optional.ofNullable(list.iterator().next());
     }
 
 }

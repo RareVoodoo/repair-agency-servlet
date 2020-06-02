@@ -1,0 +1,34 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-war" name="repair-agency-servlets:war exploded">
+    <output-path>$PROJECT_DIR$/target/repair-agency-servlets</output-path>
+    <properties id="maven-jee-properties">
+      <options>
+        <exploded>true</exploded>
+        <module>repair-agency-servlets</module>
+        <packaging>war</packaging>
+      </options>
+    </properties>
+    <root id="root">
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="classes">
+          <element id="module-output" name="repair-agency-servlets" />
+        </element>
+        <element id="directory" name="lib">
+          <element id="library" level="project" name="Maven: javax.servlet:jstl:1.2" />
+          <element id="library" level="project" name="Maven: mysql:mysql-connector-java:8.0.19" />
+          <element id="library" level="project" name="Maven: com.google.protobuf:protobuf-java:3.6.1" />
+          <element id="library" level="project" name="Maven: org.slf4j:slf4j-api:1.8.0-beta4" />
+          <element id="library" level="project" name="Maven: com.ibm.icu:icu4j:61.1" />
+          <element id="library" level="project" name="Maven: org.jasypt:jasypt:1.9.3" />
+          <element id="library" level="project" name="Maven: org.apache.logging.log4j:log4j-web:2.8.2" />
+          <element id="library" level="project" name="Maven: org.apache.logging.log4j:log4j-api:2.8.2" />
+          <element id="library" level="project" name="Maven: org.apache.logging.log4j:log4j-core:2.8.2" />
+        </element>
+      </element>
+      <element id="directory" name="META-INF">
+        <element id="file-copy" path="$PROJECT_DIR$/target/repair-agency-servlets/META-INF/MANIFEST.MF" />
+      </element>
+      <element id="javaee-facet-resources" facet="repair-agency-servlets/web/Web" />
+    </root>
+  </artifact>
+</component>

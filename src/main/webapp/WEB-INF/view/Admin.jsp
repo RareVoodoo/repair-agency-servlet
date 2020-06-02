@@ -2,7 +2,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page isELIgnored="false" %>
-<c:set var="language" value="${sessionScope.lang}" scope="session"/>
+<c:set var="language" value="${sessionScope.currentLocale}" scope="session"/>
 
 <fmt:setLocale value="${language}"/>
 <fmt:setBundle basename="messages"/>
@@ -45,7 +45,7 @@
                 </ul>
                 <a class="btn btn-primary btn-sm"
                    role="button"
-                   href="<c:url value="/logout"/>">
+                   href="/app/logout">
                     <fmt:message key="page.auth.logout"/></a>
 
             </form>
@@ -65,34 +65,71 @@
             <table class="table">
                 <thead class=" text-primary">
                 <th scope="col">Id</th>
-                <th scope="col">Description</th>
-                <th scope="col">RepairPrice</th>
-                <th scope="col">Cancellation Reason</th>
-                <th scope="col">Accept</th>
-                <th scope="col">Cancel</th>
-                <th scope="col">Delete</th>
+                <th scope="col"><fmt:message key="label.user.description"/></th>
+                <th scope="col"><fmt:message key="label.user.repair.price"/></th>
+                <th scope="col"><fmt:message key="label.admin.cancellation.reason"/></th>
+                <th scope="col"><fmt:message key="label.admin.accept"/></th>
+                <th scope="col"><fmt:message key="label.admin.cancel"/></th>
+                <th scope="col"><fmt:message key="label.admin.delete"/></th>
                 </thead>
                 <tbody>
                 <c:forEach items="${request}" var="req" varStatus="idx">
                     <tr>
                         <td>${req.id}</td>
                         <td>${req.description}</td>
-                        <td>${req.uahPrice}</td>
+                        <c:choose>
+                            <c:when test="${language == 'en'}">
+                                <td>${req.usdPrice}</td>
+                            </c:when>
+                            <c:when test="${language == 'ua'}">
+                                <td>${req.uahPrice}</td>
+                            </c:when>
+                            <c:otherwise>
+                                <td>${req.usdPrice}</td>
+                            </c:otherwise>
+                        </c:choose>
                         <td>${req.cancellationReason}</td>
                         <td><a id="accept" class="btn btn-success btn-sm text-white" data-toggle="modal"
                                data-id="${req.id}"
-                               data-target="#acceptRequestModal">Accept</a></td>
+                               data-target="#acceptRequestModal"><fmt:message key="label.button.accept"/></a></td>
                         <td><a id="cancel" class="btn btn-danger btn-sm text-white"
                                data-toggle="modal"
                                data-id="${req.id}"
-                               data-target="#cancelRequestModal">Cancel</a></td>
+                               data-target="#cancelRequestModal"><fmt:message key="label.button.cancel"/></a></td>
                         <td>
-                            <a  class="btn btn-danger btn-sm text-white" href="<c:url value="admin/delete?id=${req.id}"/>">Delete</a>
+                            <a class="btn btn-danger btn-sm text-white"
+                               href="admin/deleteRequest?id=${req.id}"><fmt:message key="label.admin.delete"/></a>
                         </td>
                     </tr>
                 </c:forEach>
                 </tbody>
+
             </table>
+            <nav aria-label="request-pagination">
+                <ul class="pagination">
+                    <c:if test="${currentPage != 1}">
+                        <li class="page-item">
+                            <a class="page-link" href="admin?page=${currentPage - 1}">Previous</a>
+                        </li>
+                    </c:if>
+
+                    <c:forEach begin="1" end="${noOfPages}" var="i">
+                        <c:choose>
+                            <c:when test="${currentPage eq i}">
+                                <li class="page-item active"><a class="page-link" href="#">${i}</a></li>
+                            </c:when>
+                            <c:otherwise>
+                                <li class="page_item"><a class="page-link" href="admin?currentPage=${i}">${i}</a></li>
+                            </c:otherwise>
+                        </c:choose>
+                    </c:forEach>
+
+                    <c:if test="${currentPage lt noOfPages}">
+                        <li class="page-item"><a class="page-link" href="admin?currentPage=${currentPage + 1}">Next</a>
+                        </li>
+                    </c:if>
+                </ul>
+            </nav>
         </div>
     </div>
 </main>
@@ -110,45 +147,11 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form action="<c:url value="admin/acceptRequest"/>">
+            <form action="admin/acceptRequest" method="post">
                 <div class="modal-body">
 
-                        <input type="hidden" value="" id="requestId" name="requestId" />
-                        <input type="text" id="price" name="price" class="form-control"
-                               placeholder="<fmt:message
-                        key="label.user.repair.price"/>" required
-                               autofocus>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal"><fmt:message
-                            key="label.button.cancel"/></button>
-                    <button type="submit" class="btn btn-primary"><fmt:message key="label.button.accept"/></button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-
-
-
-<!-- Modal -->
-<div class="modal fade" id="cancelRequestModal" tabindex="-1" role="dialog"
-     aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-scrollable" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalScrollableTitle1"><fmt:message
-                        key="label.user.repair.price"/></h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <form action="<c:url value="admin/cancelRequest"/>">
-                <div class="modal-body">
-
-                    <input type="hidden" value="" id="reqId" name="reqId" />
-                    <input type="text" id="cancelReason" name="cancelReason" class="form-control"
+                    <input type="hidden" value="" id="requestId" name="requestId"/>
+                    <input type="text" id="price" name="price" class="form-control"
                            placeholder="<fmt:message
                         key="label.user.repair.price"/>" required
                            autofocus>
@@ -164,22 +167,50 @@
 </div>
 
 
+<!-- Modal -->
+<div class="modal fade" id="cancelRequestModal" tabindex="-1" role="dialog"
+     aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalScrollableTitle1"><fmt:message
+                        key="label.admin.cancel"/></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="admin/cancelRequest" method="post">
+                <div class="modal-body">
 
+                    <input type="hidden" value="" id="reqId" name="reqId"/>
+                    <input type="text" id="cancelReason" name="cancelReason" class="form-control"
+                           placeholder="<fmt:message
+                        key="label.admin.cancellation.reason"/>" required
+                           autofocus>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal"><fmt:message
+                            key="label.button.cancel"/></button>
+                    <button type="submit" class="btn btn-primary"><fmt:message key="label.button.accept"/></button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
 
 <script type="text/javascript">
     $(document).on("click", "#accept", function () {
         var id = $(this).data('id');
-        $(".modal-body #requestId").val( id );
+        $(".modal-body #requestId").val(id);
     });
 </script>
-
 
 
 <script type="text/javascript">
     $(document).on("click", "#cancel", function () {
         var id = $(this).data('id');
-        $(".modal-body #reqId").val( id );
+        $(".modal-body #reqId").val(id);
     });
 </script>
 

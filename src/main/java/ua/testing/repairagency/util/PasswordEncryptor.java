@@ -28,7 +28,6 @@ public class PasswordEncryptor {
     public String encrypt(String userPassword){
         return encryptor.encrypt(userPassword);
     }
-
     public String decrypt(String userPassword){
         return encryptor.decrypt(userPassword);
     }

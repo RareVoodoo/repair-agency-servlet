@@ -6,8 +6,8 @@ public class RepairRequestDto {
     private boolean accepted;
     private boolean performed;
     private String cancellationReason;
-    private int uahPrice;
-    private int usdPrice;
+    private Long uahPrice;
+    private Long usdPrice;
     private String address;
     private String userPhoneNumber;
     private Long userId;
@@ -61,19 +61,19 @@ public class RepairRequestDto {
         this.cancellationReason = cancellationReason;
     }
 
-    public int getUahPrice() {
+    public Long getUahPrice() {
         return uahPrice;
     }
 
-    public void setUahPrice(int uahPrice) {
+    public void setUahPrice(Long uahPrice) {
         this.uahPrice = uahPrice;
     }
 
-    public int getUsdPrice() {
+    public Long getUsdPrice() {
         return usdPrice;
     }
 
-    public void setUsdPrice(int usdPrice) {
+    public void setUsdPrice(Long usdPrice) {
         this.usdPrice = usdPrice;
     }
 

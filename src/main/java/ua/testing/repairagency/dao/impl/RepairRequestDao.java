@@ -1,10 +1,9 @@
-package ua.testing.repairagency.dao;
+package ua.testing.repairagency.dao.impl;
 
+import ua.testing.repairagency.dao.AbstractDao;
 import ua.testing.repairagency.exception.PersistException;
 import ua.testing.repairagency.model.RepairRequest;
-import ua.testing.repairagency.model.User;
 
-import javax.management.Query;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -30,12 +29,22 @@ public class RepairRequestDao extends AbstractDao<RepairRequest, Long> {
         return "select * from repair_request;";
     }
 
+
+    public String getAllSelectWithLimitQuery() {
+        return "select * from repair_request limit ?,?;";
+    }
+
     public String getAllByUsernameQuery() {
         return "select repair_request.* from repair_request \n" +
                 "inner join user\n" +
                 "on iduser = user_iduser\n" +
                 "where username = ?\n" +
                 "and accepted & performed\n";
+    }
+
+    public String getAllAcceptedQuery() {
+        return "select * from repair_request \n" +
+                "where accepted";
     }
 
     @Override
@@ -47,7 +56,7 @@ public class RepairRequestDao extends AbstractDao<RepairRequest, Long> {
     @Override
     public String getUpdateQuery() {
         return " update repair_request set \n" +
-                "description = ?,\n" +
+                "`description` = ?,\n" +
                 "accepted =?,\n" +
                 "performed = ?,\n" +
                 "cancellation_reason = ?,\n" +
@@ -56,6 +65,13 @@ public class RepairRequestDao extends AbstractDao<RepairRequest, Long> {
                 "user_iduser = ?,\n" +
                 "address = ?,\n" +
                 "user_phone_number = ? \n" +
+                "where idrepair_request = ?;";
+    }
+
+    public String getRequestCommentQuery() {
+        return "select `comment` from ( select idrepair_request, `comment` FROM repair_request\n" +
+                "inner join `comment`\n" +
+                "where id_repair_request = idrepair_request) as comment_query\n" +
                 "where idrepair_request = ?;";
     }
 
@@ -72,6 +88,10 @@ public class RepairRequestDao extends AbstractDao<RepairRequest, Long> {
                 " values (?,?,?,?,?,?,?,?)";
     }
 
+    public String getNumberOfRowsQuery() {
+        return "select count(idrepair_request) as columns_count from repair_request";
+    }
+
     @Override
     public void prepareStatementForInsert(PreparedStatement statement, RepairRequest object) throws PersistException {
         try {
@@ -81,6 +101,7 @@ public class RepairRequestDao extends AbstractDao<RepairRequest, Long> {
             statement.setLong(4, object.getUahPrice());
             statement.setLong(5, object.getUsdPrice());
             statement.setString(6, object.getAddress());
+            statement.setString(7, object.getUserPhoneNumber());
             statement.setString(7, object.getUserPhoneNumber());
             statement.setLong(8, object.getUserId());
         } catch (Exception e) {
@@ -136,6 +157,60 @@ public class RepairRequestDao extends AbstractDao<RepairRequest, Long> {
 
         try (PreparedStatement statement = connection.prepareStatement(getAllByUsernameQuery())) {
             statement.setString(1, username);
+            ResultSet resultSet = statement.executeQuery();
+            list = parseResultSet(resultSet);
+        } catch (Exception e) {
+            throw new PersistException();
+        }
+        return list;
+    }
+
+    public List<RepairRequest> getAllAcceptedRequests() throws PersistException {
+        List<RepairRequest> list;
+        try (PreparedStatement statement = connection.prepareStatement(getAllAcceptedQuery())) {
+            ResultSet resultSet = statement.executeQuery();
+            list = parseResultSet(resultSet);
+        } catch (Exception e) {
+            throw new PersistException();
+        }
+        return list;
+    }
+
+    public String getRequestCommentById(Long id) throws PersistException {
+        String comment = "";
+        try (PreparedStatement statement = connection.prepareStatement(getRequestCommentQuery())) {
+            statement.setLong(1, id);
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                comment = resultSet.getString("comment");
+            }
+        } catch (Exception e) {
+            throw new PersistException(e);
+        }
+        return comment;
+    }
+
+
+    public int getNumberOfRows() throws PersistException {
+        int numOfRows = 0;
+        try (PreparedStatement statement = connection.prepareStatement(getNumberOfRowsQuery())) {
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                numOfRows = resultSet.getInt("columns_count");
+            }
+        } catch (Exception e) {
+            throw new PersistException(e);
+        }
+        return numOfRows;
+    }
+
+    public List<RepairRequest> getAllByLimit(int currentPage, int recordsPerPage) throws PersistException {
+        List<RepairRequest> list;
+        int start = currentPage * recordsPerPage - recordsPerPage;
+        try (PreparedStatement statement = connection.prepareStatement(getAllSelectWithLimitQuery())) {
+            statement.setInt(1, start);
+            statement.setInt(2, recordsPerPage);
             ResultSet resultSet = statement.executeQuery();
             list = parseResultSet(resultSet);
         } catch (Exception e) {

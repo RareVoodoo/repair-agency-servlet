@@ -8,14 +8,18 @@ import java.sql.ResultSet;
 import java.util.List;
 import java.util.Optional;
 
-public abstract class AbstractDao<T extends  Identified<PK>, PK extends Long> implements GenericDao<T> {
+public abstract class AbstractDao<T extends Identified<PK>, PK extends Long> implements GenericDao<T> {
 
     private Connection connection;
 
     public abstract String getAllSelectQuery();
+
     public abstract String getSelectQuery();
+
     public abstract String getUpdateQuery();
+
     public abstract String getDeleteQuery();
+
     public abstract String getInsertQuery();
 
 
@@ -29,19 +33,19 @@ public abstract class AbstractDao<T extends  Identified<PK>, PK extends Long> im
     public Optional<T> getById(long id) throws PersistException {
         List<T> list;
         String sqlQuery = getSelectQuery();
-        try(PreparedStatement statement = connection.prepareStatement(sqlQuery)) {
-            statement.setLong(1,id);
+        try (PreparedStatement statement = connection.prepareStatement(sqlQuery)) {
+            statement.setLong(1, id);
             ResultSet rs = statement.executeQuery();
             list = parseResultSet(rs);
 
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new PersistException();
         }
 
-        if(list == null|| list.size() == 0){
+        if (list == null || list.size() == 0) {
             throw new PersistException("Record with PK = " + id + " not found");
         }
-        if(list.size() >1){
+        if (list.size() > 1) {
             throw new PersistException("Received more than one record");
 
         }
@@ -68,12 +72,11 @@ public abstract class AbstractDao<T extends  Identified<PK>, PK extends Long> im
         String sql = getUpdateQuery();
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             prepareStatementForUpdate(preparedStatement, object);
-           preparedStatement.setObject(1, object.getId());
-           int count = preparedStatement.executeUpdate();
-           if(count != 1){
-               throw new PersistException("On update modify more than 1 record: " + count );
-           }
-        }catch (Exception e){
+            int count = preparedStatement.executeUpdate();
+            if (count != 1) {
+                throw new PersistException("On update modify more than 1 record: " + count);
+            }
+        } catch (Exception e) {
             throw new PersistException(e);
         }
     }

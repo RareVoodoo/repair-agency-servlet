@@ -9,5 +9,8 @@
         <module name="repair-agency-servlets" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="repair-agency-servlets" target="1.8" />
+    </bytecodeTargetLevel>
   </component>
 </project>

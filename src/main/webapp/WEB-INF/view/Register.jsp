@@ -18,7 +18,7 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>Login</title>
+    <title>Registration</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
     <link href="https://getbootstrap.com/docs/4.0/examples/signin/signin.css" rel="stylesheet" crossorigin="anonymous"/>
@@ -36,24 +36,24 @@
     </nav>
 
 
-    <form class="form-signin" action="/registration" method="post">
-        <h2 class="form-signin-heading">Registration</h2>
+    <form class="form-signin" action="/app/registerUser" method="post">
+        <h2 class="form-signin-heading"><fmt:message key="label.form.registration.title"/></h2>
 
 
         <p>
             <label for="fullName" class="sr-only">Full Name</label>
-            <input type="text" id="fullName" name="fullName" class="form-control" placeholder="FullName" required>
+            <input type="text" id="fullName" name="fullName" class="form-control" placeholder="<fmt:message key="page.form.full.name"/>" required>
         </p>
         <p>
             <label for="username" class="sr-only">Username</label>
-            <input type="text" id="username" name="username" class="form-control" placeholder="Username" required
+            <input type="text" id="username" name="username" class="form-control" placeholder=<fmt:message key="page.form.username"/> required
                    autofocus>
         </p>
         <p>
             <label for="password" class="sr-only">Password</label>
-            <input type="password" id="password" name="password" class="form-control" placeholder="Password" required>
+            <input type="password" id="password" name="password" class="form-control" placeholder="<fmt:message key="page.form.password"/>" required>
         </p>
-        <button class="btn btn-lg btn-primary btn-block" type="submit">Register</button>
+        <button class="btn btn-lg btn-primary btn-block" type="submit"><fmt:message key="page.registration.form.submit"/></button>
 
         <input type="hidden" name="lang" value="en"/>
 
@@ -61,14 +61,3 @@
 </div>
 </body>
 </html>
-
-<%--<form action="/registration" method="post">--%>
-
-<%--    Name:<input type="text" name="username"/><br/><br/>--%>
-<%--    Password:<input type="password" name="password"/><br/><br/>--%>
-<%--    Email Id:<input type="text" name="fullName"/><br/><br/>--%>
-
-<%--    <br/><br/>--%>
-<%--    <input type="submit" value="register"/>--%>
-
-<%--</form>--%>

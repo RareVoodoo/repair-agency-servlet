@@ -45,7 +45,7 @@
                 </ul>
                 <a class="btn btn-primary btn-sm"
                    role="button"
-                   href="<c:url value="/logout"/>">
+                   href="/app/logout">
                     <fmt:message key="page.auth.logout"/></a>
 
             </form>
@@ -76,7 +76,7 @@
                 <th scope="col">Id</th>
                 <th scope="col"><fmt:message key="label.user.description"/></th>
                 <th scope="col"><fmt:message key="label.user.repair.price"/></th>
-                <th scope="col"><fmt:message key="label.user.comment"/></th>
+                <th scope="col"><fmt:message key="label.admin.cancellation.reason"/></th>
                 <th scope="col"><fmt:message key="label.user.add.comment"/></th>
                 </thead>
                 <tbody>
@@ -113,7 +113,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form action="<c:url value="user/addComment"/>">
+            <form action="user/commentRequest" method="post">
                 <div class="modal-body">
                     <input type="hidden" value="" id="requestId" name="requestId"/>
                     <input type="text" id="price" name="comment" class="form-control"
@@ -140,12 +140,12 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalScrollableTitle2"><fmt:message
-                        key="label.user.comment"/></h5>
+                        key="page.new.request"/></h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form action="/user/newRequest" method="post">
+            <form action="user/createRequest" method="post">
                 <div class="modal-body">
                     <p>
                     <input type="text" name="description" class="form-control"

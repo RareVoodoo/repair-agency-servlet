@@ -1,5 +1,6 @@
-package ua.testing.repairagency.dao;
+package ua.testing.repairagency.dao.impl;
 
+import ua.testing.repairagency.dao.AbstractDao;
 import ua.testing.repairagency.exception.PersistException;
 import ua.testing.repairagency.model.Comment;
 import ua.testing.repairagency.model.User;
