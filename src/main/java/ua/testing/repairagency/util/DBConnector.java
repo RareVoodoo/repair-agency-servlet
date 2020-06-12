@@ -34,12 +34,12 @@ public class DbConnector {
 
     public  Connection getConnection(){
         Context ctx;
-        Connection con = null;
+        Connection connection = null;
 
         try{
             ctx = new InitialContext();
-            DataSource dataSource = (DataSource) ctx.lookup("java:comp/env/jdbc/mysqlPool");
-            con = dataSource.getConnection();
+            DataSource dataSource = (DataSource) ctx.lookup(Constants.POOL_CONNECTION_CONTEXT_PATH);
+            connection = dataSource.getConnection();
         } catch (SQLException e) {
             logger.error("SQL exception");
             e.printStackTrace();
@@ -48,7 +48,7 @@ public class DbConnector {
             e.printStackTrace();
 
         }
-        return con;
+        return connection;
     }
 
 }

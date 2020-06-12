@@ -1,5 +1,7 @@
 package ua.testing.repairagency.filter;
 
+import ua.testing.repairagency.util.Constants;
+
 import java.io.IOException;
 import java.util.Optional;
 
@@ -29,14 +31,19 @@ public class AuthFilter implements Filter {
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse res = (HttpServletResponse) response;
 
-        request.setAttribute("redirect", false);
+        request.setAttribute(Constants.REDIRECT_ATTRIBUTE, false);
         HttpSession session = req.getSession();
 
-        Optional<String> userRole = Optional.ofNullable((String) session.getAttribute("role"));
+        Optional<String> userRole = Optional.ofNullable((String) session.getAttribute(Constants.ROLE_ATTRIBUTE));
         if (!userRole.isPresent()) {
-            session.setAttribute("role", "Unknown");
+            session.setAttribute(Constants.ROLE_ATTRIBUTE, Constants.UNKNOWN_ROLE);
         }
+
+
+
+
         chain.doFilter(request, response);
     }
+
 
 }

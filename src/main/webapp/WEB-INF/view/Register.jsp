@@ -10,7 +10,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page isELIgnored="false" %>
-<c:set var="language" value="${sessionScope.lang}" scope="session"/>
+<c:set var="language" value="${sessionScope.currentLocale}" scope="session"/>
 
 <fmt:setLocale value="${language}"/>
 <fmt:setBundle basename="messages"/>
@@ -54,9 +54,10 @@
             <input type="password" id="password" name="password" class="form-control" placeholder="<fmt:message key="page.form.password"/>" required>
         </p>
         <button class="btn btn-lg btn-primary btn-block" type="submit"><fmt:message key="page.registration.form.submit"/></button>
-
         <input type="hidden" name="lang" value="en"/>
 
+        <span class="text-center"><fmt:message key="page.form.already.registered.title"/></span>
+        <span><a href="/app/login" ><fmt:message key="page.form.login"/></a></span>
     </form>
 </div>
 </body>

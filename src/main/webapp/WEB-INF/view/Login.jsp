@@ -3,7 +3,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page isELIgnored="false" %>
-<c:set var="language" value="${sessionScope.lang}" scope="session"/>
+<c:set var="language" value="${sessionScope.currentLocale}" scope="session"/>
 
 <fmt:setLocale value="${language}"/>
 <fmt:setBundle basename="messages"/>
@@ -11,7 +11,7 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>Login</title>
+    <title><fmt:message key="page.form.login.title"/></title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
     <link href="https://getbootstrap.com/docs/4.0/examples/signin/signin.css" rel="stylesheet" crossorigin="anonymous"/>
@@ -45,6 +45,8 @@
 
         <input type="hidden" name="lang" value="en"/>
 
+        <span class="text-center" ><fmt:message key="page.form.not.registered.title"/></span>
+        <span><a href="/app/registration" ><fmt:message key="page.registration.form.submit"/></a></span>
     </form>
 </div>
 </body>

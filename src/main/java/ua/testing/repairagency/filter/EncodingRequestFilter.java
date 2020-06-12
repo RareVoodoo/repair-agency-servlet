@@ -1,5 +1,7 @@
 package ua.testing.repairagency.filter;
 
+import ua.testing.repairagency.util.Constants;
+
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -14,9 +16,9 @@ public class EncodingRequestFilter implements Filter {
     public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws ServletException, IOException {
 
 
-        resp.setContentType("text/html;");
-        req.setCharacterEncoding("UTF-8");
-        resp.setCharacterEncoding("UTF-8");
+        resp.setContentType(Constants.CONTENT_TYPE_DEFAULT);
+        req.setCharacterEncoding(Constants.CHAR_ENCODING_DEFAULT);
+        resp.setCharacterEncoding(Constants.CHAR_ENCODING_DEFAULT);
         chain.doFilter(req, resp);
     }
 

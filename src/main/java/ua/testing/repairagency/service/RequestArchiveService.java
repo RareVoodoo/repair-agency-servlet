@@ -14,6 +14,11 @@ public class RequestArchiveService {
     private RequestArchiveDao archiveDao = new RequestArchiveDao(connection);
     private RepairRequestDao requestDao = new RepairRequestDao(connection);
 
+    /**
+     * Called in case of repair request deleting
+     * @param repairRequest repair request object
+     *
+     */
     public void addRepairRequestToArchive(RepairRequest repairRequest) throws PersistException {
         try {
             archiveDao.create(new RepairRequestArchive.Builder()

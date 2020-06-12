@@ -2,14 +2,14 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page isELIgnored="false" %>
-<c:set var="language" value="${sessionScope.lang}" scope="session"/>
+<c:set var="language" value="${sessionScope.currentLocale}" scope="session"/>
 
 <fmt:setLocale value="${language}"/>
 <fmt:setBundle basename="messages"/>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-    <title>Master Page</title>
+    <title><fmt:message key="page.master.cabinet"/></title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
           integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -75,7 +75,17 @@
                     <tr>
                         <td>${req.id}</td>
                         <td>${req.description}</td>
-                        <td>${req.uahPrice}</td>
+                        <c:choose>
+                            <c:when test="${language == 'en'}">
+                                <td>${req.usdPrice}</td>
+                            </c:when>
+                            <c:when test="${language == 'ua'}">
+                                <td>${req.uahPrice}</td>
+                            </c:when>
+                            <c:otherwise>
+                                <td>${req.usdPrice}</td>
+                            </c:otherwise>
+                        </c:choose>
                         <td><a href="master/performRequest?requestId=${req.id}" id="perform" class="btn btn-success btn-sm text-white">
                             <fmt:message key="label.master.perform"/>
                         </a>

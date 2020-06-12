@@ -9,7 +9,13 @@ import ua.testing.repairagency.util.DbConnector;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+
 public class UserCommentService {
+    /**
+     * Called only for accepted and performed repair request
+     * @param commentDto comment object
+     *
+     */
     public void createUserComment(CommentDto commentDto){
         CommentDao commentDao = new CommentDao(DbConnector.getInstance().getConnection());
 

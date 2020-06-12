@@ -1,27 +1,29 @@
 package ua.testing.repairagency.service;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import ua.testing.repairagency.dao.impl.UserDao;
 import ua.testing.repairagency.dto.UserDto;
 import ua.testing.repairagency.exception.PersistException;
 import ua.testing.repairagency.model.User;
 import ua.testing.repairagency.region.transliteration.NameTransliteration;
+import ua.testing.repairagency.util.Constants;
 import ua.testing.repairagency.util.DbConnector;
 import ua.testing.repairagency.util.PasswordEncryptor;
 
-import javax.servlet.http.HttpServletRequest;
+import java.sql.Connection;
 
 
 public class RegisterService {
-    private static final int USER_ROLE_ID = 1;
+
     private PasswordEncryptor passwordEncryptor = PasswordEncryptor.getInstance();
     private NameTransliteration nameTransliteration = new NameTransliteration();
+    private Connection connection = DbConnector.getInstance().getConnection();
 
 
+    /**
+     * Registers new user
+     * @param userDto user object with user credentials
+     */
     public void registerUser(UserDto userDto){
-
-
         userDto.setPassword(passwordEncryptor.encrypt(userDto.getPassword()));
 
         try {
@@ -31,20 +33,23 @@ public class RegisterService {
         }
     }
 
+
+
+    /**
+     * Adds user object to the database
+     * @param userDto user object with user credentials
+     */
     public void createNewUser(UserDto userDto) throws PersistException {
-
-        final Logger logger = LoggerFactory.getLogger(RegisterService.class);
-
-        UserDao userDao = new UserDao(DbConnector.getInstance().getConnection());
+        UserDao userDao = new UserDao(connection);
 
         try {
         userDao.create(new User.Builder()
-                .en_name(nameTransliteration.transliterate(NameTransliteration.EN_LOCALE, userDto.getEn_name()))
-                .ua_name(nameTransliteration.transliterate(NameTransliteration.UA_LOCALE, userDto.getEn_name()))
+                .en_name(nameTransliteration.transliterate(Constants.EN_LOCALE, userDto.getEn_name()))
+                .ua_name(nameTransliteration.transliterate(Constants.UA_LOCALE, userDto.getEn_name()))
                 .username(userDto.getUsername())
                 .password(userDto.getPassword())
                 .enabled(true)
-                .idAuthority(USER_ROLE_ID)
+                .idAuthority(Constants.USER_ROLE_ID)
                 .build());
 
         }catch (Exception e){

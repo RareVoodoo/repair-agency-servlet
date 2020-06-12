@@ -68,8 +68,8 @@ public class UserDao extends AbstractDao<User, Long> {
                 " where username = ?;";
     }
 
-    public String getUserByUsername(){
-        return "select * from user " +
+    public String getUserByUsernameQuery(){
+        return "select user.* from user " +
                 "left join authority " +
                 "on id_authority = idauthority " +
                 "where username = ?;";
@@ -143,7 +143,7 @@ public class UserDao extends AbstractDao<User, Long> {
 
     public Optional<User> getUserByUsername(String username) throws PersistException {
         List<User> list;
-        try(PreparedStatement statement = connection.prepareStatement(getUserByUsername())){
+        try(PreparedStatement statement = connection.prepareStatement(getUserByUsernameQuery())){
             statement.setString(1,username);
             ResultSet rs = statement.executeQuery();
             list = parseResultSet(rs);
@@ -152,7 +152,10 @@ public class UserDao extends AbstractDao<User, Long> {
             throw  new PersistException(e);
         }
 
+        if (list == null || list.size() == 0) {
+            throw new PersistException("Record with username = " + username + " not found");
+        }
+
         return Optional.ofNullable(list.iterator().next());
     }
-
 }

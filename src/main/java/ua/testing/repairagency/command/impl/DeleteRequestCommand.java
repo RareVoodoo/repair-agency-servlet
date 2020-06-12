@@ -5,6 +5,7 @@ import org.apache.logging.log4j.Logger;
 import ua.testing.repairagency.command.Command;
 import ua.testing.repairagency.dto.RepairRequestDto;
 import ua.testing.repairagency.service.RepairRequestService;
+import ua.testing.repairagency.util.Constants;
 
 import javax.servlet.http.HttpServletRequest;
 import java.sql.SQLException;
@@ -16,16 +17,16 @@ public class DeleteRequestCommand implements Command {
 
     @Override
     public String execute(HttpServletRequest request) {
-        request.setAttribute("redirect", true);
-        logger.info("current request id: " + request.getParameter("id"));
+        request.setAttribute(Constants.REDIRECT_ATTRIBUTE, true);
+        logger.info("current request id: " + request.getParameter(Constants.ID_PARAM));
 
-        requestDto.setId(Long.parseLong(request.getParameter("id")));
+        requestDto.setId(Long.parseLong(request.getParameter(Constants.ID_PARAM)));
 
         try {
             repairRequestService.deleteUserRequest(requestDto);
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return "/app/admin";
+        return Constants.ADMIN_REDIRECT;
     }
 }

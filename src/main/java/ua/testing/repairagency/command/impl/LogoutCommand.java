@@ -3,6 +3,7 @@ package ua.testing.repairagency.command.impl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ua.testing.repairagency.command.Command;
+import ua.testing.repairagency.util.Constants;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
@@ -17,12 +18,11 @@ public class LogoutCommand implements Command {
         if(session!=null)
         {
             session.invalidate();
-            request.setAttribute("errMessage", "You have logged out successfully");
             logger.info("Logged out");
         }
-        request.setAttribute("redirect", true);
+        request.setAttribute(Constants.REDIRECT_ATTRIBUTE, true);
 
-        return "/app/login";
+        return Constants.LOGIN_REDIRECT;
     }
 
 }

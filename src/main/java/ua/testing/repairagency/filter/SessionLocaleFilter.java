@@ -2,7 +2,7 @@ package ua.testing.repairagency.filter;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import ua.testing.repairagency.region.transliteration.NameTransliteration;
+import ua.testing.repairagency.util.Constants;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
@@ -31,12 +31,12 @@ public class SessionLocaleFilter implements Filter {
         HttpSession session = httpRequest.getSession();
 
         if(session.isNew()){
-            session.setAttribute("currentLocale",NameTransliteration.EN_LOCALE);
+            session.setAttribute(Constants.CURRENT_LOCALE_ATTRIBUTE, Constants.EN_LOCALE);
             this.httpServletRequest = httpRequest;
             this.session = session;
         }
 
-            Optional<String> currentLocaleKey = Optional.ofNullable(httpRequest.getParameter("lang"));
+            Optional<String> currentLocaleKey = Optional.ofNullable(httpRequest.getParameter(Constants.LANG_PARAM));
             currentLocaleKey.ifPresent(this::assignUserLocale);
 
         chain.doFilter(req, resp);
@@ -44,14 +44,14 @@ public class SessionLocaleFilter implements Filter {
 
     private void switchLocaleToEn(HttpServletRequest httpRequest, HttpSession session){
         logger.info("Current locale is en");
-        session.setAttribute("currentLocale", NameTransliteration.EN_LOCALE);
-        httpRequest.setAttribute("language", "en");
+        session.setAttribute(Constants.CURRENT_LOCALE_ATTRIBUTE, Constants.EN_LOCALE);
+        httpRequest.setAttribute(Constants.CURRENT_LOCALE_ATTRIBUTE, Constants.EN_LANGUAGE);
     }
 
     private void switchLocaleToUa(HttpServletRequest httpRequest, HttpSession session){
         logger.info("Current locale is ua");
-        session.setAttribute("currentLocale", NameTransliteration.UA_LOCALE);
-        httpRequest.setAttribute("language", "ua");
+        session.setAttribute(Constants.CURRENT_LOCALE_ATTRIBUTE, Constants.UA_LOCALE);
+        httpRequest.setAttribute(Constants.CURRENT_LOCALE_ATTRIBUTE, Constants.UA_LANGUAGE);
     }
 
     private void assignUserLocale(String localeKey){

@@ -7,7 +7,7 @@ public class PasswordEncryptor {
         AES256TextEncryptor encryptor = new AES256TextEncryptor();
 
     {
-        encryptor.setPassword("G&^T&!S==1=s&Y&*Jik");
+        encryptor.setPassword(Constants.ENCRYPTOR_PASSWORD);
     }
     private PasswordEncryptor(){ }
 
