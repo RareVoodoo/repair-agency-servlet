@@ -1,6 +1,9 @@
 package ua.testing.repairagency.model;
 
 import ua.testing.repairagency.dao.Identified;
+import ua.testing.repairagency.util.Constants;
+
+import javax.validation.constraints.Pattern;
 
 public class RepairRequest implements Identified<Long> {
 
@@ -22,6 +25,7 @@ public class RepairRequest implements Identified<Long> {
     public void setId(Long id) {
         this.id = id;
     }
+
 
     public String getDescription() {
         return description;
@@ -47,6 +51,7 @@ public class RepairRequest implements Identified<Long> {
         this.performed = performed;
     }
 
+
     public String getCancellationReason() {
         return cancellationReason;
     }
@@ -62,6 +67,7 @@ public class RepairRequest implements Identified<Long> {
     public void setUahPrice(Long uahPrice) {
         this.uahPrice = uahPrice;
     }
+
 
     public Long getUsdPrice() {
         return usdPrice;

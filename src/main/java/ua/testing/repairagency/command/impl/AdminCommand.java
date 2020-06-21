@@ -16,9 +16,12 @@ public class AdminCommand implements Command {
     public String execute(HttpServletRequest request) {
         HttpSession session = request.getSession();
 
-
         if (session.getAttribute(Constants.ROLE_ATTRIBUTE).equals(Constants.ADMIN_ROLE)) {
+
+            Object sessionValidationErrors =  session.getAttribute(Constants.ERRORS_ATTRIBUTE);
+            request.setAttribute(Constants.ERRORS_ATTRIBUTE, sessionValidationErrors);
             repairRequestService.paginatePage(request);
+
             return Constants.ADMIN_PAGE_PATH;
         } else {
             return Constants.ILLEGAL_ACCESS_ERROR_PATH;

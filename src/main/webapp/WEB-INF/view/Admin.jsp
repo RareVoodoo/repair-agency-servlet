@@ -26,11 +26,13 @@
         </button>
 
         <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item active">
                     <a class="nav-link" href="#"><fmt:message key="page.admin.request.table"/><span class="sr-only">(current)</span></a>
                 </li>
             </ul>
+
             <form class="form-inline my-2 my-lg-0">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item dropdown">
@@ -62,6 +64,11 @@
 <main role="main" class="container">
     <div class="starter-template">
         <div class="table-responsive">
+            <ul>
+                <c:forEach items="${sessionScope.errors}" var="err" varStatus="idx">
+                    <li><fmt:message key= "${err}"/></li>
+                </c:forEach>
+            </ul>
             <table class="table">
                 <thead class=" text-primary">
                 <th scope="col">Id</th>

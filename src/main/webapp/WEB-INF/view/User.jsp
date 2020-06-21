@@ -69,6 +69,13 @@
 
         </div>
 
+        <ul>
+            <c:forEach items="${errors}" var="err" varStatus="idx">
+                <li><fmt:message key= "${err}"/></li>
+            </c:forEach>
+        </ul>
+
+
         <h2><fmt:message key="page.user.my.executed.requests"/></h2>
         <div class="table-responsive">
             <table class="table">

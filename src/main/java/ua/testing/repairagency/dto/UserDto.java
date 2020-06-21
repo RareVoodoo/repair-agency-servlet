@@ -1,5 +1,9 @@
 package ua.testing.repairagency.dto;
 
+import ua.testing.repairagency.util.Constants;
+
+import javax.validation.constraints.Pattern;
+
 public class UserDto {
     private Long userId;
     private String ua_name;
@@ -30,6 +34,7 @@ public class UserDto {
         this.en_name = en_name;
     }
 
+    @Pattern(message = Constants.USERNAME_VALIDATION_PROPERTY, regexp = Constants.USERNAME_VALIDATION_REGEX)
     public String getUsername() {
         return username;
     }
@@ -38,6 +43,7 @@ public class UserDto {
         this.username = username;
     }
 
+    @Pattern(message = Constants.PASSWORD_VALIDATION_PROPERTY,regexp = Constants.PASSWORD_VALIDATION_REGEX)
     public String getPassword() {
         return password;
     }

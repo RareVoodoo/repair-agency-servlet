@@ -1,5 +1,9 @@
 package ua.testing.repairagency.dto;
 
+import ua.testing.repairagency.util.Constants;
+
+import javax.validation.constraints.*;
+
 public class RepairRequestDto {
     private Long id;
     private String description;
@@ -29,6 +33,7 @@ public class RepairRequestDto {
         this.id = id;
     }
 
+    @Pattern(message = Constants.DESCRIPTION_VALIDATION_PROPERTY ,regexp = Constants.DESCRIPTION_VALIDATION_REGEX)
     public String getDescription() {
         return description;
     }
@@ -53,6 +58,8 @@ public class RepairRequestDto {
         this.performed = performed;
     }
 
+    @Pattern(message = Constants.CANCELLATION_REASON_VALIDATION_PROPERTY,
+            regexp = Constants.CANCELLATION_REASON_VALIDATION_REGEX)
     public String getCancellationReason() {
         return cancellationReason;
     }
@@ -65,18 +72,24 @@ public class RepairRequestDto {
         return uahPrice;
     }
 
-    public void setUahPrice(Long uahPrice) {
+    public void setUahPrice(long uahPrice) {
         this.uahPrice = uahPrice;
     }
 
+
+
+    @PositiveOrZero(message = Constants.POSITIVE_PRICE_VALIDATION_PROPERTY)
+    @DecimalMax(value= Constants.PRICE_MAX_VALUE)
+    @NotNull(message = Constants.EMPTY_PRICE_VALIDATION_PROPERTY)
     public Long getUsdPrice() {
         return usdPrice;
     }
 
-    public void setUsdPrice(Long usdPrice) {
+    public void setUsdPrice(long usdPrice) {
         this.usdPrice = usdPrice;
     }
 
+    @Pattern( message = Constants.ADDRESS_VALIDATION_PROPERTY  ,regexp = Constants.ADDRESS_VALIDATION_REGEX)
     public String getAddress() {
         return address;
     }
@@ -85,6 +98,7 @@ public class RepairRequestDto {
         this.address = address;
     }
 
+    @Pattern(message = Constants.PHONE_NUMBER_VALIDATION_PROPERTY,regexp = Constants.PHONE_NUMBER_VALIDATION_REGEX)
     public String getUserPhoneNumber() {
         return userPhoneNumber;
     }

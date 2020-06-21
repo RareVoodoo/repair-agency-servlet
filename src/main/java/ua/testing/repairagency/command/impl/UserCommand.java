@@ -3,6 +3,7 @@ package ua.testing.repairagency.command.impl;
 import ua.testing.repairagency.command.Command;
 import ua.testing.repairagency.dao.impl.CommentDao;
 import ua.testing.repairagency.dao.impl.RepairRequestDao;
+import ua.testing.repairagency.dto.CommentDto;
 import ua.testing.repairagency.exception.PersistException;
 import ua.testing.repairagency.util.Constants;
 import ua.testing.repairagency.util.DbConnector;
@@ -20,6 +21,9 @@ public class UserCommand implements Command {
         HttpSession session = request.getSession();
         RepairRequestDao requestDao = new RepairRequestDao(connection);
         CommentDao commentDao = new CommentDao(connection);
+
+        Object sessionValidationErrors =  session.getAttribute(Constants.ERRORS_ATTRIBUTE);
+        request.setAttribute(Constants.ERRORS_ATTRIBUTE, sessionValidationErrors);
 
         if (session.getAttribute(Constants.ROLE_ATTRIBUTE).equals(Constants.USER_ROLE)) {
             try {

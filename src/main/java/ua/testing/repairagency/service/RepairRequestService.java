@@ -118,6 +118,8 @@ public class RepairRequestService {
             logger.info(repairRequest.getId());
             repairRequest.setAccepted(false);
             repairRequest.setCancellationReason(requestDto.getCancellationReason());
+            repairRequest.setUsdPrice(requestDto.getUsdPrice());
+            repairRequest.setUahPrice(requestDto.getUahPrice());
             repairDao.update(repairRequest);
         } catch (PersistException e) {
             e.printStackTrace();

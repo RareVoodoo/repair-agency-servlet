@@ -1,6 +1,10 @@
 package ua.testing.repairagency.model;
 
 import ua.testing.repairagency.dao.Identified;
+import ua.testing.repairagency.util.Constants;
+
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Pattern;
 
 public class User implements Identified<Long> {
     private Long userId;
@@ -32,6 +36,8 @@ public class User implements Identified<Long> {
         this.en_name = en_name;
     }
 
+    @NotEmpty
+    @Pattern(regexp = Constants.USERNAME_VALIDATION_REGEX)
     public String getUsername() {
         return username;
     }
@@ -40,6 +46,8 @@ public class User implements Identified<Long> {
         this.username = username;
     }
 
+    @NotEmpty
+    @Pattern(regexp = Constants.PASSWORD_VALIDATION_REGEX)
     public String getPassword() {
         return password;
     }

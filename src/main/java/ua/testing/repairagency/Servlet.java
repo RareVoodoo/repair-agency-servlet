@@ -1,9 +1,11 @@
 package ua.testing.repairagency;
 
+import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ua.testing.repairagency.command.*;
 import ua.testing.repairagency.command.impl.*;
+import ua.testing.repairagency.util.Constants;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -15,6 +17,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Optional;
 
 public class Servlet extends HttpServlet {
     private Map<String, Command> commands = new HashMap<>();
@@ -57,16 +60,18 @@ public class Servlet extends HttpServlet {
 
     private void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        HttpSession session = request.getSession();
-        String path = request.getRequestURI();
-        path = path.replaceAll(".*/app/", "");
-        Command command = commands.getOrDefault(path,
-                (r) -> "/WEB-INF/view/Login.jsp");
+
+        Optional<String> path = Optional.ofNullable(request.getRequestURI());
+        path = path.equals(Optional.empty()) ? Optional.of(Constants.LOGIN_REDIRECT)
+                :Optional.of(path.get().replaceAll(".*/app/", ""));
+
+        Command command = commands.getOrDefault(path.get(),
+                (r) -> Constants.LOGIN_PAGE_PATH);
         logger.info(command.getClass().getName());
         String page = command.execute(request);
 
         if (isRequiresRedirect(request)) {
-            request.setAttribute("redirect", false);
+            request.setAttribute(Constants.REDIRECT_ATTRIBUTE, false);
             response.sendRedirect(page);
         } else {
             request.getRequestDispatcher(page).forward(request, response);
@@ -74,8 +79,8 @@ public class Servlet extends HttpServlet {
     }
 
     private boolean isRequiresRedirect(HttpServletRequest request) {
-        logger.info("redirect = " + request.getAttribute("redirect"));
-        return (boolean) request.getAttribute("redirect");
+        logger.info("redirect = " + request.getAttribute(Constants.REDIRECT_ATTRIBUTE));
+        return (boolean) request.getAttribute(Constants.REDIRECT_ATTRIBUTE);
     }
 
 }

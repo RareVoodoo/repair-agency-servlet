@@ -1,10 +1,3 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: User
-  Date: 4/20/2020
-  Time: 5:22 PM
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%--<%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt" %>--%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
@@ -18,7 +11,7 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>Registration</title>
+    <title><fmt:message key="label.form.registration.title"/></title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
     <link href="https://getbootstrap.com/docs/4.0/examples/signin/signin.css" rel="stylesheet" crossorigin="anonymous"/>
@@ -35,29 +28,38 @@
         </form>
     </nav>
 
+    <ul>
+        <c:forEach items="${errors}" var="err" varStatus="idx">
+            <li><fmt:message key= "${err}"/></li>
 
+        </c:forEach>
+    </ul>
     <form class="form-signin" action="/app/registerUser" method="post">
         <h2 class="form-signin-heading"><fmt:message key="label.form.registration.title"/></h2>
 
 
         <p>
             <label for="fullName" class="sr-only">Full Name</label>
-            <input type="text" id="fullName" name="fullName" class="form-control" placeholder="<fmt:message key="page.form.full.name"/>" required>
+            <input type="text" id="fullName" name="fullName" class="form-control"
+                   placeholder="<fmt:message key="page.form.full.name"/>" required>
         </p>
         <p>
             <label for="username" class="sr-only">Username</label>
-            <input type="text" id="username" name="username" class="form-control" placeholder=<fmt:message key="page.form.username"/> required
+            <input type="text" id="username" name="username" class="form-control" placeholder=
+            <fmt:message key="page.form.username"/> required
                    autofocus>
         </p>
         <p>
             <label for="password" class="sr-only">Password</label>
-            <input type="password" id="password" name="password" class="form-control" placeholder="<fmt:message key="page.form.password"/>" required>
+            <input type="password" id="password" name="password" class="form-control"
+                   placeholder="<fmt:message key="page.form.password"/>" required>
         </p>
-        <button class="btn btn-lg btn-primary btn-block" type="submit"><fmt:message key="page.registration.form.submit"/></button>
+        <button class="btn btn-lg btn-primary btn-block" type="submit"><fmt:message
+                key="page.registration.form.submit"/></button>
         <input type="hidden" name="lang" value="en"/>
 
         <span class="text-center"><fmt:message key="page.form.already.registered.title"/></span>
-        <span><a href="/app/login" ><fmt:message key="page.form.login"/></a></span>
+        <span><a href="/app/login"><fmt:message key="page.form.login"/></a></span>
     </form>
 </div>
 </body>

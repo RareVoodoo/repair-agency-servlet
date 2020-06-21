@@ -1,5 +1,7 @@
 package ua.testing.repairagency.service;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import ua.testing.repairagency.dao.impl.UserDao;
 import ua.testing.repairagency.dto.UserDto;
 import ua.testing.repairagency.exception.PersistException;
@@ -7,6 +9,7 @@ import ua.testing.repairagency.model.User;
 import ua.testing.repairagency.region.transliteration.NameTransliteration;
 import ua.testing.repairagency.util.Constants;
 import ua.testing.repairagency.util.DbConnector;
+import ua.testing.repairagency.util.FormValidator;
 import ua.testing.repairagency.util.PasswordEncryptor;
 
 import java.sql.Connection;
@@ -17,6 +20,8 @@ public class RegisterService {
     private PasswordEncryptor passwordEncryptor = PasswordEncryptor.getInstance();
     private NameTransliteration nameTransliteration = new NameTransliteration();
     private Connection connection = DbConnector.getInstance().getConnection();
+    private FormValidator<User> formValidator = new FormValidator<>();
+    private Logger logger = LogManager.getLogger();
 
 
     /**
@@ -25,12 +30,12 @@ public class RegisterService {
      */
     public void registerUser(UserDto userDto){
         userDto.setPassword(passwordEncryptor.encrypt(userDto.getPassword()));
-
         try {
             createNewUser(userDto);
         } catch (PersistException e) {
             e.printStackTrace();
         }
+        logger.info("New user: " + userDto.getUsername() + "is created");
     }
 
 

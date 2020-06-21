@@ -2,9 +2,11 @@ package ua.testing.repairagency.command.impl;
 
 import ua.testing.repairagency.command.Command;
 import ua.testing.repairagency.dto.RepairRequestDto;
+import ua.testing.repairagency.dto.UserDto;
 import ua.testing.repairagency.exception.PersistException;
 import ua.testing.repairagency.service.RepairRequestService;
 import ua.testing.repairagency.util.Constants;
+import ua.testing.repairagency.util.FormValidator;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -12,7 +14,7 @@ import javax.servlet.http.HttpSession;
 public class CreateRequestCommand implements Command {
     private RepairRequestService requestService = new RepairRequestService();
     private RepairRequestDto requestDto = new RepairRequestDto();
-
+    private FormValidator<RepairRequestDto> formValidator = new FormValidator<>();
     @Override
     public String execute(HttpServletRequest request) {
         HttpSession session = request.getSession();
@@ -26,11 +28,16 @@ public class CreateRequestCommand implements Command {
         requestDto.setAddress(address);
         requestDto.setUsername((String) session.getAttribute(Constants.CURRENT_USERNAME_ATTRIBUTE));
 
-        try {
-            requestService.createNewRepairRequest(requestDto);
-        } catch (PersistException e) {
-            e.printStackTrace();
+
+        if(formValidator.isValidFields(requestDto)) {
+            try {
+                requestService.createNewRepairRequest(requestDto);
+            } catch (PersistException e) {
+                e.printStackTrace();
+            }
         }
+        session.setAttribute(Constants.ERRORS_ATTRIBUTE, formValidator.getErrors());
+
         return Constants.USER_REDIRECT;
     }
 }

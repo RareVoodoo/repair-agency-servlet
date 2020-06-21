@@ -10,10 +10,21 @@ public class PropertyReader {
     private PropertyReader(){}
 
 
-    public static String getPropertyValue(String name){
+    public static String getConstPropertyValue(String key){
+        return getPropertyValue(Constants.CONSTS_PROPERTY_FILENAME,key);
+    }
+
+    public static String getMessagePropertyValue(String key){
+        return getPropertyValue(Constants.MESSAGES_PROPERTY_FILENAME, key);
+    }
+
+
+
+
+    private static String getPropertyValue(String propertyFileName, String key){
         String propertyValue = null;
         try(InputStream inputStream = PropertyReader.class
-                .getClassLoader().getResourceAsStream(Constants.DEFAULT_PROPERTY_FILENAME)){
+                .getClassLoader().getResourceAsStream(Constants.CONSTS_PROPERTY_FILENAME)){
             Properties properties = new Properties();
 
             if (inputStream != null){
@@ -21,7 +32,7 @@ public class PropertyReader {
             }else {
                 throw new FileNotFoundException();
             }
-            propertyValue = properties.getProperty(name);
+            propertyValue = properties.getProperty(key);
 
         } catch (IOException e) {
             e.printStackTrace();
